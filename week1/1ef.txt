@@ -1,0 +1,12 @@
+1.e Possible improvements
+Gradient ascent and hill climbing are quite similar, and they are based almost exclusively on exploitation. Can
+you think of any additions to these algorithms in order to do more exploration?
+
+    - We can have multiple starting points and a lower value for step length.
+
+1.f Exhaustive search vs. simulated annealing
+Which algorithm do you think is the most efficient at maximizing f(x) under the conditions in Problem 1.d;
+exhaustive search or simulated annealing? Explain.
+
+    -I think in the situation of 1d, exhaustive search would be the better algorithm. Because the search speace is very small and thus 
+     the exhaustive search algorithm would be grarantied to provide the most optimal solution within a reasonable time. 
