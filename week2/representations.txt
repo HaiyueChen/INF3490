@@ -1,0 +1,131 @@
+Recall all the representations that have been presented. Which mutation and recombination operators are
+compatible with which representations?
+
+Binary
+    - mutation
+        -Bit flipping. Alter each gene with a probability of Pm(mutation rate).
+
+    - recombination
+        - One point crossover
+            - Choose a random point on the two parents.
+            - Split the parents at this crossover point.
+            - Create children by exchanging tails.
+        - N point crossover
+            - Choose n random points.
+            - Split along these points.
+            - Glue parts together to create children.
+        - Uniform crossover
+            - Coin toss.
+            - Assign head to one of the parents and tail to the other.
+            - Create children by flipping the coin for each gene. If coin toss reselts in head, copy the gene from the first parent into children, vise versa.
+            - Create second children by making an inverse copy of the first child.
+            - Breaks more links in the genome.
+
+        
+Integer
+    - mutation (both extensions of the bit flipping mutation)
+        - Creep mutation
+            - Adding a small (positive or negative) value to each gene with a probability of Pm.
+        -Random resetting 
+            - A new value for each gene is chosen with a probability of Pm.
+
+    - recombination
+        - One point crossover
+        - N point crossover
+        - Uniform crossover
+
+
+Realvalue or floating point
+    - mutation
+        - Uniform mutation
+            - Choose a random value from within a defined boundary for each gene with a probability of Pm.
+        - Non-uniform mutation
+            - Add a random deviate from the Gaussian distrbution to add to each gene with a probability of Pm. 2/3 of the deviate will be within the range of +- standard deviation.
+
+    - recombination
+        - Discrete recombination 
+            - Taking the value of a gene discretely from only one of the parents, with equal probability.
+            - Can be implemented with:
+                - One point crossover
+                - N point crossover
+                - Uniform crossover
+        - Intermediate recombination
+            - Try to create the children to be 'between' the parents.
+            - Zi = aXi + (1-a)Yi, 0 < a > 1
+                - Where parameter a can be
+                    1. Constant 0.5. This a a uniform arithmetical crossover.
+                    2. variable depending on the age of the population.
+                    3. Picked at random every time.
+
+
+Permutation
+    - mutation
+        - MUST at least change two values.
+        - Mutation algorithms applies to the whole genome rather than threating individual genes.
+        - Swap mutation
+            - Pick two alleles at random and swap their positions.
+        - Insert mutation
+            - Pick two alleles at random and move the second one to be directly behind the first one, moving the rest along.
+            - Preserves most of the order and adjacency information.
+        - Scramble mutation
+            - Pick a subset of the genome at random and randomly rearrange the alleles in the positions.
+        - Inversion mutation
+            - Pick two alleles at random and then invert the substring between them.
+            - Preserves most adjascency information, but disruptive of order information.
+
+    - recombination
+        - Partially mapped crossover
+            1. Choose random segment from P1 and copy to child
+            2. Starting from the first crossover point, look for elements i in that segment of P2 that have not been copied. 
+            3. For each of these i element, look in the child to see what element j has been copied in its place from P1.
+            4. Place i into the position occupied by j in P2, since we know that we will not be putting j there. Since j is already copied to the offspring in another place.
+            5. If the place occupied by j in P2 has already been filled in the offspring k, put i in the position occupied by k in P2.
+            6. Having dealt with the elements from the crossover segment, the rest of the offspring can be filled from P2.
+        - Edge recombination
+            - Construct a table listing which edges are present i the two parents, if an edge is present in both, mark with a +.
+            - One the edge table is constructed:
+                1. Pick an initial element, entry, at random and put in the offspring.
+                2. Set variable current element = entry.
+                3. Remove all references to current element from table.
+                4. Examine list for current element:
+                    - If there is a common edge, pick that to be the next element.
+                    - Otherwise pick the entry in the table which has the shortest list.
+                    - Ties are split at random.
+                5. In the case of reaching an empty list:
+                    - A new element is chosen at random.
+        - Order crossover
+            - The ideal is to preserve relative order that elements occur.
+            1. Choose an arbitrary part from the first parent.
+            2. Copy this part to the first child.
+            3. Copy the numbers that are not in the first part, to the first child.
+                - Starting right from cut point of the copied part.
+                - Using the order from the second parent.
+                - and wrapping around the end.
+            4. Analogous for the second child, only parent roles are reversed.
+
+        - Cycle crossover
+            - Each allele comes from one parent along with information about its position.
+            1. Make a cycle of alleles from P1 in the following way:
+                - Start with first allele of P1.
+                - Look at the allele in the same position in P2.
+                - Go to the position with the same allele in P1.
+                - Add this allele to the cycle.
+                - Repeat step 2 to step 4 until you arrive at the first allele of P1.
+            2. Put the alleles of the cycle in the first child on the positions they have in the first parent.
+            3. Take the next cycle from the second parent.
+
+
+Tree
+    - mutation
+        - Replace randomly chosen subtree by randomly generated tree.
+        - Mutation has two parameters.
+            - Pm, probability of mutation.
+            - probability to chose an internal point as the root of the subtree to be replaced.
+        - Pm is advised to be 0 or very small in a tree representation.
+        - The size of the child can exceed the size of the parent.
+    - recombination
+        - Exchange two randomly chosen subtree between the parents.
+        - Reombination has two parameters:
+            - Pc, probability to choose recombination.
+            - probability to chose an internal point within each parent as the crossover point.
+        - The size of the offspring can exceed the parents.
