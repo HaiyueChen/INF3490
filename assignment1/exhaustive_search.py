@@ -1,7 +1,6 @@
-import csv
-import itertools
-import sys
-import time
+import csv, itertools, sys, time
+
+
 def get_distance(from_c, to_c, data):
     from_index = data[0].index(from_c)
     to_index = data[0].index(to_c)
@@ -13,8 +12,9 @@ def get_sum_distance(cities, data):
     sum_distance = 0
     
     for i in range(len(cities) - 1):
-        
         sum_distance += get_distance(cities[i], cities[i + 1],data)
+    
+    sum_distance += get_distance(cities[-1], cities[0], data)
     return sum_distance
 
 def main():
@@ -42,20 +42,19 @@ def main():
             path_count = 0
             for path in permutations:
                 cities = list(path)
-                cities.append(cities[0])
                 curr_distance = get_sum_distance(cities, data)
-                #print(cities, "Distance:" , curr_distance)
                 if(curr_distance < best_distance or best_distance == -1):
-                    #print("Changed to better path")
+                    print("Changed to better path:", path_count)
                     best_distance = curr_distance
                     best_path = cities
                 path_count += 1
-            
+
+
+            print("----------------------------\n")
             print("Total possible paths:" , path_count)
-            print("----------------------------")
+            print()
             print("Shortest path:" , best_path)
-            print("Distance" , best_distance)
-            print("----------------------------")
+            print("Distance:" , best_distance)
 
     else:
         print('''Correct way to use this program
@@ -64,4 +63,6 @@ def main():
 
 start_time = time.time()
 main()
+print()
 print("Running time: ", (time.time()- start_time) , "seconds")
+print("\n----------------------------")
