@@ -6,11 +6,11 @@ class TSPsolver:
     def __init__(self, cities, data):
         self.route = cities.copy()
         self.distance = 0
-
         self._set_distance(data)
+        self.data = data
 
-        self.reproduction_chance = -1
-
+        self.fitness = -1
+        self.chance = 0
     
     def pmx_crossover(self, other_solver):
         parent_1 = self.route
@@ -36,18 +36,18 @@ class TSPsolver:
                 val_p2 = parent_2[index]
                 val_p1 = parent_1[index]
             
-            index_itt = parent_2.index(val_p1)
-            while (index_itt in used_index):
-                val_p1 = parent_1[index_itt]
                 index_itt = parent_2.index(val_p1)
+                while (index_itt in used_index):
+                    val_p1 = parent_1[index_itt]
+                    index_itt = parent_2.index(val_p1)
             
-            child[index_itt] = val_p2
+                child[index_itt] = val_p2
 
         for i in range(len(child)):
             if(child[i] == None):
                 child[i] = parent_2[i]
 
-        return child
+        return TSPsolver(child, self.data)
 
     def mutate(self):
         choice = random.uniform(0,1)
@@ -60,73 +60,83 @@ class TSPsolver:
         else:
             return self._inversion_mutation()
 
+    def set_fitness(self, total_distance):
+        self.fitness = total_distance / self.distance
+
+    def set_chance(self, total_fitness):
+        self.chance = self.fitness / total_fitness
+
     def _swap_mutate(self):
+        print("doing swap mutation")
         index_1 = 0
         index_2 = 0
-        child = self.route.copy()
+        child_route = self.route.copy()
         while index_1 == index_2:
-            index_1 = random.randint(0, len(child))
-            index_2 = random.randint(0, len(child))
+            index_1 = random.randint(0, len(child_route) - 1)
+            index_2 = random.randint(0, len(child_route) - 1)
         
-        child[index_1], child[index_2] = child[index_2], child[index_1]
-        return child
+        child_route[index_1], child_route[index_2] = child_route[index_2], child_route[index_1]
+        return TSPsolver(child_route, self.data)
 
 
     def _insert_mutate(self):
+        print("doing insert mutation")
         index_1 = 0
         index_2 = 0
-        child = self.route.copy()
+        child_route = self.route.copy()
         while index_1 == index_2:
-            index_1 = random.randint(0, len(child))
-            index_2 = random.randint(0, len(child))
+            index_1 = random.randint(0, len(child_route) - 1)
+            index_2 = random.randint(0, len(child_route) - 1)
         
         if index_1 < index_2:
-            val_to_insert = child.pop(index_2)
-            child.insert(index_1 + 1, val_to_insert)
+            val_to_insert = child_route.pop(index_2)
+            child_route.insert(index_1 + 1, val_to_insert)
         else:
-            val_to_insert = child.pop(index_1)
-            child.insert(index_2 + 1, val_to_insert)
+            val_to_insert = child_route.pop(index_1)
+            child_route.insert(index_2 + 1, val_to_insert)
 
-        return child
+        return TSPsolver(child_route, self.data)
 
 
     def _scramble_mutate(self):
+        print("doing scramble mutation")
         index_1 = 0
         index_2 = 0
-        child = self.route.copy()
+        child_route = self.route.copy()
         while index_1 == index_2:
-            index_1 = random.randint(0, len(child))
-            index_2 = random.randint(0, len(child))
+            index_1 = random.randint(0, len(child_route))
+            index_2 = random.randint(0, len(child_route))
         
         if index_1 < index_2:
-            segment = child[index_1:index_2]
+            segment = child_route[index_1:index_2]
             random.shuffle(segment)
-            child[index_1:index_2] = segment
+            child_route[index_1:index_2] = segment
         else:
-            segment = child[index_2:index_1]
+            segment = child_route[index_2:index_1]
             random.shuffle(segment)
-            child[index_2:index_1] = segment
+            child_route[index_2:index_1] = segment
         
-        return child
+        return TSPsolver(child_route, self.data)
     
     def _inversion_mutation(self):
+        print("doing inversion mutation")
         index_1 = 0
         index_2 = 0
-        child = self.route.copy()
+        child_route = self.route.copy()
         while index_1 == index_2:
-            index_1 = random.randint(0, len(child))
-            index_2 = random.randint(0, len(child))
+            index_1 = random.randint(0, len(child_route))
+            index_2 = random.randint(0, len(child_route))
         
         if index_1 < index_2:
-            segment = child[index_1:index_2]
+            segment = child_route[index_1:index_2]
             segment = list(reversed(segment))
-            child[index_1:index_2] = segment
+            child_route[index_1:index_2] = segment
         else:
-            segment = child[index_2:index_1]
+            segment = child_route[index_2:index_1]
             segment = list(reversed(segment))
-            child[index_2:index_1] = segment
+            child_route[index_2:index_1] = segment
         
-        return child
+        return TSPsolver(child_route, self.data)
     
 
     def _set_distance(self, data):
@@ -145,4 +155,5 @@ class TSPsolver:
         return distance
 
     def __repr__(self):
-        return str(self.route)
+        rep = [self.fitness , self.distance, self.route]
+        return str(rep)
