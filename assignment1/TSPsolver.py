@@ -16,7 +16,7 @@ class TSPsolver:
         parent_1 = self.route
         parent_2 = other_solver.route
 
-        child = [None] * len(parent_1)
+        child_route = [None] * len(parent_1)
         used_index = []
         
         starting_index = random.randint(0, len(parent_1) - 1)
@@ -25,13 +25,13 @@ class TSPsolver:
         segment_p1 = parent_1[starting_index : ending_index]
 
         for i in range(segment_length):
-            child[starting_index] = segment_p1[i]
+            child_route[starting_index] = segment_p1[i]
             used_index.append(starting_index)
             starting_index += 1
 
 
         for index in used_index:
-            if parent_2[index] not in child:
+            if parent_2[index] not in child_route:
             
                 val_p2 = parent_2[index]
                 val_p1 = parent_1[index]
@@ -41,13 +41,13 @@ class TSPsolver:
                     val_p1 = parent_1[index_itt]
                     index_itt = parent_2.index(val_p1)
             
-                child[index_itt] = val_p2
+                child_route[index_itt] = val_p2
 
-        for i in range(len(child)):
-            if(child[i] == None):
-                child[i] = parent_2[i]
+        for i in range(len(child_route)):
+            if(child_route[i] == None):
+                child_route[i] = parent_2[i]
 
-        return TSPsolver(child, self.data)
+        return TSPsolver(child_route, self.data)
 
     def mutate(self):
         choice = random.uniform(0,1)
@@ -67,7 +67,7 @@ class TSPsolver:
         self.chance = self.fitness / total_fitness
 
     def _swap_mutate(self):
-        print("doing swap mutation")
+        #print("doing swap mutation")
         index_1 = 0
         index_2 = 0
         child_route = self.route.copy()
@@ -80,7 +80,7 @@ class TSPsolver:
 
 
     def _insert_mutate(self):
-        print("doing insert mutation")
+        #print("doing insert mutation")
         index_1 = 0
         index_2 = 0
         child_route = self.route.copy()
@@ -99,7 +99,7 @@ class TSPsolver:
 
 
     def _scramble_mutate(self):
-        print("doing scramble mutation")
+        #print("doing scramble mutation")
         index_1 = 0
         index_2 = 0
         child_route = self.route.copy()
@@ -119,7 +119,7 @@ class TSPsolver:
         return TSPsolver(child_route, self.data)
     
     def _inversion_mutation(self):
-        print("doing inversion mutation")
+        #print("doing inversion mutation")
         index_1 = 0
         index_2 = 0
         child_route = self.route.copy()

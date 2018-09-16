@@ -40,13 +40,15 @@ def main():
             best_path = []
             best_distance = -1
             path_count = 0
+            best_numb = 0
             for path in permutations:
                 cities = list(path)
                 curr_distance = get_sum_distance(cities, data)
                 if(curr_distance < best_distance or best_distance == -1):
-                    print("Changed to better path:", path_count)
+                    best_numb = path_count
                     best_distance = curr_distance
                     best_path = cities
+                print("Current:", path_count, " Best:", best_numb)
                 path_count += 1
 
 

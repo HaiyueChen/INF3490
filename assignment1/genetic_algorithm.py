@@ -1,7 +1,7 @@
 import csv, sys, time, random
 from TSPsolver import TSPsolver
 
-def selection(population):
+def parent_selection(population):
     selected = None
     index = random.randint(0, len(population) - 1)
     while selected == None:
@@ -15,8 +15,17 @@ def selection(population):
 
     return selected
 
+def survivor_selection(population, population_size):
+    #print(population)
+    population.sort(key=lambda x: x.fitness, reverse=True)
+    #print(population)
+    while len(population) > population_size:
+        population.pop()
+
+
 
 def evolve(population, data):
+    population_size = len(population)
     total_distance = sum(itter.distance for itter in population)
     for solver in population:
         solver.set_fitness(total_distance)
@@ -25,22 +34,31 @@ def evolve(population, data):
     for solver in population:
         solver.set_chance(total_fitness)
 
-    new_population = []
 
     for i in range(len(population)):
-        parent_1 = selection(population)
-        parent_2 = selection(population)
+        parent_1 = parent_selection(population)
+        parent_2 = parent_selection(population)
 
-        child_1 = parent_1.pmx_crossover(parent_2, data)
-        child_2 = parent_2.pmx_crossover(parent_1, data)
+
+        child_1 = parent_1.pmx_crossover(parent_2)
+        child_2 = parent_2.pmx_crossover(parent_1)
 
         child_1 = child_1.mutate()
         child_2 = child_2.mutate()
 
-        new_population.append(child_1)
-        new_population.append(child_2)
+        population.append(child_1)
+        population.append(child_2)
 
-    population = new_population
+    
+    total_distance = sum(itter.distance for itter in population)
+    for solver in population:
+        solver.set_fitness(total_distance)
+
+    total_fitness = sum(itter.fitness for itter in population)
+    for solver in population:
+        solver.set_chance(total_fitness)
+    survivor_selection(population, population_size)
+    
 
 
 
@@ -93,16 +111,18 @@ def main():
             random.shuffle(rand_route)
             population.append(TSPsolver(rand_route, data))
 
+        print("Starting population: ")
+        for individual in population:
+            print(individual)
+        print("\n")
+
         for i in range(numb_generations):
             evolve(population, data)
 
-
-            for individual in population:
-                print(individual)
-
-            print()
-
-
+        print("Best result:")
+        print("Fitness:", population[0].fitness)
+        print("Distance:", population[0].distance)
+        print("Route:", population[0].route)
 
 
 
@@ -114,14 +134,15 @@ def main():
 
 
 
-"""
+
 start_time = time.time()
 main()
 print("\nRunning time: ", (time.time() - start_time), "seconds")
 print("\n----------------------------")
+
+
+
 """
-
-
 def test():
     with open("european_cities.csv", "r") as f:
         data = list(csv.reader(f, delimiter=';'))
@@ -137,7 +158,6 @@ def test():
     print(solver)
 
 
-"""
     for i in range(population_size):
         rand_route = cities.copy()
         random.shuffle(rand_route)
@@ -151,6 +171,5 @@ def test():
 
         for individual in population:
             print(individual)
-"""
 
-test()
+"""
