@@ -69,52 +69,63 @@ def calc_mean(all_routes):
     return summ / len(all_routes)
 
 def main():
-    if(len(sys.argv) == 2):
+    if(len(sys.argv) == 3):
         try:
             numb_cities = int(sys.argv[1])
         except ValueError:
-            print("Please write a number as the commandline argument")
+            print("Please write a number as the argument for number of cities")
             sys.exit(-1)
 
         if(numb_cities > 24 or numb_cities < 1):
-            print("Please write a number between 1 and 24")
+            print("Please write a number between 1 and 24 for the number of cities")
             sys.exit(-1)
-        else:
-            with open("european_cities.csv", "r") as f:
-                data = list(csv.reader(f, delimiter=';'))
 
-            cities = data[0]
+        try:
+            numb_attempts = int(sys.argv[2])
+        except ValueError:
+            print("Please write a number as the argument for number of attempts")
 
-            sub_cities = cities[0:numb_cities]
+        if(numb_attempts < 1):
+            print("Please write a number > 1 for the number of attempts")
+            sys.exit(-1)
 
-            acc_solutions = []
 
-            for i in range(100):
-                route = sub_cities.copy()
-                random.shuffle(route)
-                route.append(route[0])
-                acc_solutions.append(hill_climbing(route, data))
 
-            acc_solutions.sort(key=lambda x: x[0])
+        with open("european_cities.csv", "r") as f:
+            data = list(csv.reader(f, delimiter=';'))
 
-            print("----------------------------\n")
-            print("Total attempts: 100\n")
-            print("Shortest path:", acc_solutions[0][1])
-            print("Distance:", acc_solutions[0][0])
-            print()
-            print("Longest path:", acc_solutions[-1][1])
-            print("Distance:", acc_solutions[-1][0])
-            print()
-            mean = calc_mean(acc_solutions)
-            print("Average distance:", mean)
-            print("Standard deviation:", standard_deviation(acc_solutions, mean))
+        cities = data[0]
+
+        sub_cities = cities[0:numb_cities]
+
+        acc_solutions = []
+
+        for i in range(numb_attempts):
+            route = sub_cities.copy()
+            random.shuffle(route)
+            route.append(route[0])
+            acc_solutions.append(hill_climbing(route, data))
+
+        acc_solutions.sort(key=lambda x: x[0])
+
+        print("----------------------------\n")
+        print("Total attempts:", numb_attempts,"\n")
+        print("Shortest path:", acc_solutions[0][1])
+        print("Distance:", acc_solutions[0][0])
+        print()
+        print("Longest path:", acc_solutions[-1][1])
+        print("Distance:", acc_solutions[-1][0])
+        print()
+        mean = calc_mean(acc_solutions)
+        print("Average distance:", mean)
+        print("Standard deviation:", standard_deviation(acc_solutions, mean))
 
 
 
 
     else:
         print('''Correct way to use this program
-        python3 exhaustive_search.py [number_of_cities]''')
+        python3 hill_climber.py [number_of_cities] [number_of_attempts]''')
         sys.exit(-1)
 
 
