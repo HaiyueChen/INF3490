@@ -10,7 +10,7 @@ class TSPsolver:
         self.data = data
 
         self.fitness = -1
-        self.chance = 0
+        self.chance = -1
     
     def pmx_crossover(self, other_solver):
         parent_1 = self.route

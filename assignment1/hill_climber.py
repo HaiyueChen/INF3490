@@ -124,8 +124,7 @@ def main():
 
 
     else:
-        print('''Correct way to use this program
-        python3 hill_climber.py [number_of_cities] [number_of_attempts]''')
+        print('''Correct way to use this program:\npython3 hill_climber.py [number_of_cities] [number_of_attempts]\n''')
         sys.exit(-1)
 
 

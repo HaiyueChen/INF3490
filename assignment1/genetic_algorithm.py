@@ -16,9 +16,7 @@ def parent_selection(population):
     return selected
 
 def survivor_selection(population, population_size):
-    #print(population)
     population.sort(key=lambda x: x.fitness, reverse=True)
-    #print(population)
     while len(population) > population_size:
         population.pop()
 
@@ -116,8 +114,10 @@ def main():
             print(individual)
         print("\n")
 
+
         for i in range(numb_generations):
             evolve(population, data)
+            print("Generation:", i, " Best:", population[0].distance)
 
         print("Best result:")
         print("Fitness:", population[0].fitness)
@@ -131,6 +131,7 @@ def main():
     else:
         print("""Correct way to use this program:\npython3 genetic_algorithm.py [number_of_cities] [number_of_generations] [population_size]
         """)
+        sys.exit(-1)
 
 
 
@@ -140,36 +141,3 @@ main()
 print("\nRunning time: ", (time.time() - start_time), "seconds")
 print("\n----------------------------")
 
-
-
-"""
-def test():
-    with open("european_cities.csv", "r") as f:
-        data = list(csv.reader(f, delimiter=';'))
-
-    cities = data[0][0:6]
-    population = []
-    population_size = 4
-    route = cities.copy()
-    solver = TSPsolver(route, data)
-    print(solver)
-    for i in range(9999999):
-        solver = solver.mutate()
-    print(solver)
-
-
-    for i in range(population_size):
-        rand_route = cities.copy()
-        random.shuffle(rand_route)
-        population.append(TSPsolver(rand_route, data))
-
-    for itt in population:
-        print(itt)
-
-    for i in range(numb_generations):
-        evolve(population, data)
-
-        for individual in population:
-            print(individual)
-
-"""

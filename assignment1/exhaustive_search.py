@@ -59,8 +59,7 @@ def main():
             print("Distance:" , best_distance)
 
     else:
-        print('''Correct way to use this program
-        python3 exhaustive_search.py [number_of_cities]''')
+        print('''Correct way to use this program:\npython3 exhaustive_search.py [number_of_cities]\n''')
         sys.exit(-1)
 
 start_time = time.time()
