@@ -103,7 +103,6 @@ def main():
         for i in range(numb_attempts):
             route = sub_cities.copy()
             random.shuffle(route)
-            route.append(route[0])
             acc_solutions.append(hill_climbing(route, data))
 
         acc_solutions.sort(key=lambda x: x[0])

@@ -33,7 +33,7 @@ def evolve(population, data):
         solver.set_chance(total_fitness)
 
 
-    for i in range(len(population)):
+    for i in range(len(population) // 2):
         parent_1 = parent_selection(population)
         parent_2 = parent_selection(population)
 
@@ -47,7 +47,7 @@ def evolve(population, data):
         population.append(child_1)
         population.append(child_2)
 
-    
+
     total_distance = sum(itter.distance for itter in population)
     for solver in population:
         solver.set_fitness(total_distance)
@@ -56,17 +56,13 @@ def evolve(population, data):
     for solver in population:
         solver.set_chance(total_fitness)
     survivor_selection(population, population_size)
-    
-
-
-
 
 
 
 
 
 def main():
-    if(len(sys.argv) == 4):
+    if(len(sys.argv) == 3):
         try:
             numb_cities = int(sys.argv[1])
         except ValueError:
@@ -77,18 +73,9 @@ def main():
             print("Please write a integer between 1 and 24 for the number of cities")
             sys.exit(-1)
 
-        try:
-            numb_generations = int(sys.argv[2])
-        except ValueError:
-            print("Please write an positive integer as the argument for number of generations")
-            sys.exit(-1)
-
-        if(numb_generations < 1):
-            print("Please write an positive integer as the argument for number of generations")
-            sys.exit(-1)
 
         try:
-            population_size = int(sys.argv[3])
+            population_size = int(sys.argv[2])
         except ValueError:
             print("Please write an positive integer as the arguemnt for population size")
             sys.exit(-1)
@@ -109,23 +96,25 @@ def main():
             random.shuffle(rand_route)
             population.append(TSPsolver(rand_route, data))
 
-        print("Starting population: ")
-        for individual in population:
-            print(individual)
-        print("\n")
 
-
-        for i in range(numb_generations):
+        gen_count = 0
+        gen_without_improvement = 0
+        best_individual = population[0]
+        while(gen_without_improvement < 50):
             evolve(population, data)
-            print("Generation:", i, " Best:", population[0].distance)
+            gen_count += 1
+            if(best_individual.distance > population[0].distance):
+                best_individual = population[0]
+                gen_without_improvement = 0
+            else:
+                gen_without_improvement += 1
 
-        print("Best result:")
+
+        print("\nTotal generations:", gen_count)
+        print("Best result found in generation:", gen_count - gen_without_improvement)
         print("Fitness:", population[0].fitness)
         print("Distance:", population[0].distance)
         print("Route:", population[0].route)
-
-
-
 
 
     else:
@@ -137,7 +126,10 @@ def main():
 
 
 start_time = time.time()
+
 main()
+
+
+
 print("\nRunning time: ", (time.time() - start_time), "seconds")
 print("\n----------------------------")
-
