@@ -116,6 +116,8 @@ def main():
         print("Distance:", population[0].distance)
         print("Route:", population[0].route)
 
+        return population[0]
+
 
     else:
         print("""Correct way to use this program:\npython3 genetic_algorithm.py [number_of_cities] [number_of_generations] [population_size]
@@ -126,9 +128,14 @@ def main():
 
 
 start_time = time.time()
+li = []
+for i in range(1000):
+    li.append(main())
 
-main()
-
+li.sort(key=lambda x : x.distance)
+print()
+print()
+print(li[0])
 
 
 print("\nRunning time: ", (time.time() - start_time), "seconds")
