@@ -52,9 +52,11 @@ test_targets = target[3::4]
 # Try networks with different number of hidden nodes:
 hidden = 12
 
-print(len(train[1]))
-print(train_targets[1])
-"""
+
+###################################################
+#print(len(valid))
+#print(len(valid_targets))
+
 # Initialize the network:
 net = mlp.mlp(train, train_targets, hidden)
 
@@ -64,6 +66,9 @@ net.earlystopping(train, train_targets, valid, valid_targets)
 #       and make train use earlystopping method.
 #       This is a matter of preference.
 
+print(net.validation(test, test_targets))
+
+"""
 # Check how well the network performed:
 net.confusion(test,test_targets)
 """
