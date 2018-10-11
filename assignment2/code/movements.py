@@ -7,6 +7,7 @@
 # Feel free to use numpy in your MLP if you like to.
 import numpy as np
 import mlp
+import time 
 
 filename = '../data/movements_day1-3.dat'
 
@@ -50,13 +51,13 @@ test = movements[3::4,0:40]
 test_targets = target[3::4]
 
 # Try networks with different number of hidden nodes:
-hidden = 12
+hidden = 120
 
 
 ###################################################
 #print(len(valid))
 #print(len(valid_targets))
-
+tid = time.time()
 # Initialize the network:
 net = mlp.mlp(train, train_targets, hidden)
 
@@ -67,7 +68,7 @@ net.earlystopping(train, train_targets, valid, valid_targets)
 #       This is a matter of preference.
 
 print(net.validation(test, test_targets))
-
+print(time.time() - tid)
 """
 # Check how well the network performed:
 net.confusion(test,test_targets)

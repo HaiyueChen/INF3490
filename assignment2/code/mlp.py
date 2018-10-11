@@ -38,30 +38,30 @@ class mlp:
         old_accuracy = 0
         self.train(inputs, targets)
         new_accuracy = self.validation(valid, valid_targets)
-    
-        while new_accuracy >= old_accuracy and epoch < 10:
-            copy_hidden = self.hidden.copy()
-            copy_output = self.output.copy()
-            old_accuracy = new_accuracy
+        for i in range(75):
+            while new_accuracy >= old_accuracy:
+                print("Epoch: " , epoch)
+                copy_hidden = self.hidden.copy()
+                copy_output = self.output.copy()
+                old_accuracy = new_accuracy
+                self.train(inputs, targets)
+                new_accuracy = self.validation(valid, valid_targets)
+                epoch += 1
             self.train(inputs, targets)
             new_accuracy = self.validation(valid, valid_targets)
-            epoch += 1
-        self.train(inputs, targets)
-        new_accuracy = self.validation(valid, valid_targets)
-
+            if new_accuracy > old_accuracy:
+                i = 0
 
         self.hidden = copy_hidden.copy()
         self.output = copy_output.copy()
-        print(epoch)
 
 
-    def train(self, inputs, targets, iterations=100):
+    def train(self, inputs, targets, iterations=75):
         for i in range(iterations):
             index = rd.randint(0, len(self.inputs) - 1)
             data = inputs[index]
             target = targets[index]
             result = self.forward(data)
-            print(result)
             self.backward(result, target, data)
 
 
@@ -87,7 +87,11 @@ class mlp:
         for i in range(len(result)):
             current = result[i]
             if current > max_value:
+                max_value = result[i]
                 result_index = i
+
+        #print("Result: ", result_index, " right", right_index)
+
 
         if result_index != right_index:
             return False
