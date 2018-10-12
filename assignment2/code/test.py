@@ -1,4 +1,3 @@
-liste = [1, 2, 3]
-
-print(liste.index(3))
-print(max(liste))
+import numpy as np 
+matrix = np.array([1, 6, 3])
+print(np.argmax(matrix))
