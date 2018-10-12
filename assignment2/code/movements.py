@@ -8,6 +8,7 @@
 import numpy as np
 import mlp
 import time 
+import sys
 
 filename = '../data/movements_day1-3.dat'
 
@@ -51,8 +52,12 @@ test = movements[3::4,0:40]
 test_targets = target[3::4]
 
 # Try networks with different number of hidden nodes:
-hidden = 400
+try:
+    hidden = int(sys.argv[1]) 
 
+except ValueError:
+    print("Please give the number fo hidden nodes as an integer")
+    sys.exit()
 
 ###################################################
 #print(len(valid))

@@ -52,7 +52,7 @@ test = movements[3::4, 0:40]
 test_targets = target[3::4]
 
 # Try networks with different number of hidden nodes:
-hidden_1 = 100
+hidden_1 = 40
 hidden_2 = 10 
 
 ###################################################
@@ -72,7 +72,7 @@ deep.earlystopping(train, train_targets, valid, valid_targets)
 print(deep.validation(test, test_targets))
 deep.confusion(test, test_targets)
 
-print("training time" end_time - start_time)
+print("training time", end_time - start_time)
 """
 # Check how well the network performed:
 net.confusion(test,test_targets)

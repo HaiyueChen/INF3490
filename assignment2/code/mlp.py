@@ -38,7 +38,7 @@ class mlp:
         old_accuracy = 0
         self.train(inputs, targets)
         new_accuracy = self.validation(valid, valid_targets)
-        for i in range(75):
+        for i in range(100):
             while new_accuracy >= old_accuracy:
                 print("Epoch: " , epoch)
                 copy_hidden = self.hidden.copy()
@@ -56,7 +56,7 @@ class mlp:
         self.output = copy_output.copy()
 
 
-    def train(self, inputs, targets, iterations=75):
+    def train(self, inputs, targets, iterations=100):
         for i in range(iterations):
             index = rd.randint(0, len(self.inputs) - 1)
             data = inputs[index]
